@@ -65,7 +65,7 @@ class Resampler : public BasicGrid<typename NewMeshType::ScalarType>
   private:
     typedef int VertexIndex;
     //typedef typename vcg::GridStaticPtr<OldFaceType, OldScalarType> GridType;
-    typedef vcg::KdTreeFace<OldMeshType> GridType;
+    typedef vcg::KdTreeFace<OldMeshType> GridType(64,8);
 
   protected:
 
