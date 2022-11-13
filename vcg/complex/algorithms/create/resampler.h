@@ -65,7 +65,7 @@ class Resampler : public BasicGrid<typename NewMeshType::ScalarType>
   private:
     typedef int VertexIndex;
     //typedef typename vcg::GridStaticPtr<OldFaceType, OldScalarType> GridType;
-    typedef vcg::KdTreeFace<OldMeshType> GridType(64,8);
+    typedef vcg::KdTreeFace<OldMeshType> GridType;
 
   protected:
 
@@ -93,7 +93,7 @@ class Resampler : public BasicGrid<typename NewMeshType::ScalarType>
 
     NewMeshType	*_newM;
     OldMeshType	*_oldM;
-    GridType _g;
+    GridType _g{64,8};
 
   public:
     NewScalarType max_dim; // the limit value of the search (that takes into account of the offset)
