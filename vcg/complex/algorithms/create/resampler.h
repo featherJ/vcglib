@@ -332,7 +332,7 @@ class Resampler : public BasicGrid<typename NewMeshType::ScalarType>
 
 
     template<class EXTRACTOR_TYPE>
-    void BuildMesh(OldMeshType &old_mesh,NewMeshType &new_mesh,EXTRACTOR_TYPE &extractor,vcg::CallBackPos *cb)
+    void BuildMesh(OldMeshType &old_mesh,NewMeshType &new_mesh,EXTRACTOR_TYPE &extractor,vcg::CallBackPos2 *cb)
     {
       _newM=&new_mesh;
       _oldM=&old_mesh;
@@ -351,7 +351,12 @@ class Resampler : public BasicGrid<typename NewMeshType::ScalarType>
       extractor.Initialize();
       for (int j=0; j<=this->siz.Y(); j++)
       {
-        if (cb) cb((100*j)/this->siz.Y(),"Marching ");
+        if (cb){
+          bool alive = (*cb)((100*j)/this->siz.Y(),"Marching ");
+          if(!alive){
+              return;
+          }
+        }
         ProcessSlice<EXTRACTOR_TYPE>(extractor);//find cells where there is the isosurface and examine it
         NextSlice();
       }
@@ -620,7 +625,7 @@ public:
   typedef vcg::tri::MarchingCubes<NewMeshType, MyWalker> MyMarchingCubes;
 
   ///resample the mesh using marching cube algorithm ,the accuracy is the dimension of one cell the parameter
-  static void Resample(OldMeshType &old_mesh, NewMeshType &new_mesh,  NewBoxType volumeBox, vcg::Point3<int> accuracy,float max_dist, float thr=0, bool DiscretizeFlag=false, bool MultiSampleFlag=false, bool AbsDistFlag=false, vcg::CallBackPos *cb=0 )
+  static void Resample(OldMeshType &old_mesh, NewMeshType &new_mesh,  NewBoxType volumeBox, vcg::Point3<int> accuracy,float max_dist, float thr=0, bool DiscretizeFlag=false, bool MultiSampleFlag=false, bool AbsDistFlag=false, vcg::CallBackPos2 *cb=0 )
   {
     ///be sure that the bounding box is updated
     vcg::tri::UpdateBounding<OldMeshType>::Box(old_mesh);

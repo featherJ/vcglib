@@ -556,7 +556,7 @@ template<class EAR>
 /// It returns the number of filled holes.
 
 template<class EAR>
-    static int EarCuttingIntersectionFill(MESH &m, const int maxSizeHole, bool Selected, CallBackPos *cb=0)
+    static int EarCuttingIntersectionFill(MESH &m, const int maxSizeHole, bool Selected, CallBackPos2 *cb=0)
     {
       std::vector<Info > vinfo;
       GetInfo(m, Selected,vinfo);
@@ -572,7 +572,12 @@ template<class EAR>
       for(ith = vinfo.begin(); ith!= vinfo.end(); ++ith)
       {
         indCb++;
-        if(cb) (*cb)(indCb*10/vinfo.size(),"Closing Holes");
+        if(cb){
+          bool alive = (*cb)(indCb*10/vinfo.size(),"Closing Holes");
+          if(!alive){
+              return holeCnt;
+          }
+        }
         if((*ith).size < maxSizeHole){
           std::vector<FacePointer *> facePtrToBeUpdated;
           holeCnt++;

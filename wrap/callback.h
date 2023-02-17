@@ -46,6 +46,8 @@ namespace vcg {
  */
 
 typedef bool CallBackPos(const int pos, const char * str );
+//新的回调，主要是解决回调无法传入上下文的问题
+typedef std::function<bool(const int, const char*)> CallBackPos2;
 
 inline bool DummyCallBackPos(const int ,  const char * ) {return true;}
 inline bool COutCallBackPos(const int ,  const char *str ) {

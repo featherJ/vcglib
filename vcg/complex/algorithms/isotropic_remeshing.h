@@ -271,7 +271,7 @@ public:
 
         Do(toRemesh,toProjectCopy,params,cb);
     }
-    static void Do(MeshType &toRemesh, MeshType &toProject, Params & params, vcg::CallBackPos * cb=0)
+    static void Do(MeshType &toRemesh, MeshType &toProject, Params & params, vcg::CallBackPos2* cb = 0)
     {
         assert(&toRemesh != &toProject);
         params.stat.Reset();
@@ -298,7 +298,12 @@ public:
 
         for(int i=0; i < params.iter; ++i)
         {
-            if(cb) cb(100*i/params.iter, "Remeshing");
+            if(cb){
+                bool alive = (*cb)(100*i/params.iter, "Remeshing");
+                if(!alive){
+                    return;
+                }
+            }
 
             if (params.adapt)
             {
